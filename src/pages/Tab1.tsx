@@ -1,22 +1,35 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
+import React, { useState } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonTextarea } from '@ionic/react';
 import './Tab1.css';
+import firebase from './firebase';
 
 const Tab1: React.FC = () => {
+  const [text, setText] = useState<string>();
+  const addNote = () => {
+    firebase
+      .firestore()
+      .collection("notes")
+      .add({text});
+      setText("");
+    console.log("here")
+  }
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Tab 1</IonTitle>
+          <IonTitle>Add Notes</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Tab 1</IonTitle>
+            <IonTitle size="large">Add</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ExploreContainer name="Tab 1 page" />
+        <div className='notes'>
+          <IonTextarea autoGrow value={text} placeholder="Enter Note here" onIonChange={e => setText(e.detail.value!)}></IonTextarea>
+          <IonButton onClick={addNote}>Submit</IonButton>
+        </div>
       </IonContent>
     </IonPage>
   );
