@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { IonButton, IonContent, IonHeader, IonInput, IonItem, IonPage, IonText, IonTextarea, IonTitle, IonToolbar } from '@ionic/react';
 import './Tab2.css';
-import firebase, { auth } from './firebase';
+import firebase from './firebase';
 import { useHistory } from 'react-router-dom';
-import { useAuthState } from 'react-firebase-hooks/auth';
 
-const Tab2: React.FC = () => {
-  const [user, loading] = useAuthState(auth);
+const PublicNotes: React.FC = () => {
   const [lists, setLists] = useState<firebase.firestore.DocumentData>([]);
   const history = useHistory();
 
@@ -14,10 +12,9 @@ const Tab2: React.FC = () => {
   useEffect(() => {
     firebase
       .firestore()
-      .collection("notesByUser")
+      .collection("notes")
       .onSnapshot((snapshot) => {
-        const filter = snapshot.docs.filter((data) => {return data.data().user == user!.uid })
-        const lists = filter.map(doc => ({
+        const lists = snapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
         }));
@@ -30,24 +27,17 @@ const Tab2: React.FC = () => {
   const handleOnDelete = (id: string) => {
     firebase
       .firestore()
-      .collection("notesByUser")
+      .collection("notes")
       .doc(id)
       .delete();
   };
 
-  const handleOnUpdate = (id: string, note: string)  => {
-    firebase
-      .firestore()
-      .collection("notesByUser")
-      .doc(id)
-      .set({note: note, user: user!.uid});
-  };
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Edit Personal Notes</IonTitle>
+          <IonTitle>View Public Notes</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
@@ -59,7 +49,7 @@ const Tab2: React.FC = () => {
         <div  className='notesDisplay'>
           {lists.map((list: firebase.firestore.DocumentData, index: number) => (
             <div key = {index} className='noteItem'>
-              <IonTextarea value={list.note} onIonChange={e => handleOnUpdate(list.id, e.detail.value!)}></IonTextarea>
+              <p>{list.note}</p>
               <div className='buttons'>
               <IonButton className='delete' onClick={() => handleOnDelete(list.id)}>Delete</IonButton>
               </div>
@@ -67,10 +57,10 @@ const Tab2: React.FC = () => {
           ))}
      </div>
       </IonContent>
-      <IonButton onClick={(e) => history.push('/publicNotes')}>Next</IonButton>
-      <IonButton onClick={(e) => history.push('/tab1')}>Back</IonButton>
+      <IonButton onClick={(e) => history.push('/tab3')}>Next</IonButton>
+      <IonButton onClick={(e) => history.push('/tab2')}>Back</IonButton>
     </IonPage>
   );
 };
 
-export default Tab2;
+export default PublicNotes;
