@@ -40,7 +40,7 @@ const Tab1: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Add Notes</IonTitle>
+          <IonTitle>Add Note</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
