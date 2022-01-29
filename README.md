@@ -8,6 +8,6 @@ Simple Note Taking App (React + Firebase + Ionic)
 3. Run `ionic serve -l` to start the development server 
 
 # Run on Android Studio
-ionic cap sync (if changes to src were made) <br/>
-ionic cap open android (run on android studio) <br/>
-ionic cap run android (run on android device) <br/>
+Run `ionic cap serve` (if changes to src were made) </br>
+Run `ionic cap open android` (run on android studio) </br>
+Run `ionic cap run android` (run on android device) </br>
